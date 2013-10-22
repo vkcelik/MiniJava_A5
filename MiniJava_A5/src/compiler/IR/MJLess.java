@@ -18,16 +18,28 @@ public class MJLess extends MJBinaryOp {
 	}
 
 	MJType typeCheck() throws TypeCheckerException {
+		MJType leftType = this.lhs.typeCheck();
+		MJType rightType = this.rhs.typeCheck();
 		
-		// here you should enter the code to type check this class
+		if (!leftType.isSame(rightType)){
+			throw new TypeCheckerException("types in < op must be the same ("+leftType.getName()+","+rightType.getName()+","+this.getClass().getName()+")");
+		}
 		
-		return MJType.getVoidType();
+		this.type=leftType;
+		
+		if (!this.type.isInt()) {
+			new TypeCheckerException("Arguments to + must have type int.");
+		}
+		
+		return this.type;
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
 			throws TypeCheckerException {
 		
 		// here you should enter the code to check whether all variables are initialized
+		this.lhs.variableInit(initialized);
+		this.rhs.variableInit(initialized);
 	}
 
 }
