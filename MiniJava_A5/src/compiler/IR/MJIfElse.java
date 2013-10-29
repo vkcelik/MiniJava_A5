@@ -28,6 +28,7 @@ public class MJIfElse extends MJIf {
 		
 		// here you should enter the code to type check this class
 		
+		
 		return MJType.getVoidType();
 	}
 
