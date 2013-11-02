@@ -42,7 +42,15 @@ public class MJMethodCallExpr extends MJExpression {
 	
 	MJType typeCheck() throws TypeCheckerException {
 		
-		// here you should enter the code to type check this class
+		/*  A method call type checks if the variable is declared and has class type, if all argument expressions
+		type check, and if the variable’s class declares a method with the correct name and combination of
+		argument types. */
+		
+		if 
+		
+		for (MJExpression e: arglist){
+			e.typeCheck();
+		}
 		
 		return MJType.getVoidType();
 	}
