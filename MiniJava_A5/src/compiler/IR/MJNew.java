@@ -43,14 +43,20 @@ public class MJNew extends MJExpression {
 	MJType typeCheck() throws TypeCheckerException {
 		
 		// here you should enter the code to type check this class
+		for (MJExpression e : arglist) {
+			e.typeCheck();
+		}
 		
-		return MJType.getVoidType();
+		return this.type;
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
 			throws TypeCheckerException {
 		
 		// here you should enter the code to check whether all variables are initialized
+		for (MJExpression e : arglist) {
+			e.variableInit(initialized);
+		}
 	}
 
 }

@@ -12,16 +12,16 @@ import compiler.Exceptions.VariableNotFound;
 
 public class MJMethodCallStmt extends MJStatement {
 
-	private MJIdentifier method;
+	private MJIdentifier id;
 	private LinkedList<MJExpression> arglist;
 
 	public MJMethodCallStmt(MJIdentifier m, LinkedList<MJExpression> arglist) {
-		this.method = m;
+		this.id = m;
 		this.arglist = arglist;
 	}
 
 	public MJIdentifier getMethod() {
-		return method;
+		return id;
 	}
 
 	public LinkedList<MJExpression> getArglist() {
@@ -31,7 +31,7 @@ public class MJMethodCallStmt extends MJStatement {
 	public void prettyPrint(PrettyPrinter prepri) {
 		boolean first = true;
 
-		this.method.prettyPrint(prepri);
+		this.id.prettyPrint(prepri);
 		prepri.print("(");
 		for (MJExpression arg : arglist) {
 
@@ -45,18 +45,54 @@ public class MJMethodCallStmt extends MJStatement {
 		}
 		prepri.println(");");
 	}
-	
+
 	MJType typeCheck() throws TypeCheckerException {
-		
+
 		// here you should enter the code to type check this class
+				
+		if (id instanceof MJSelector) {
+			MJSelector selector = (MJSelector) id;
+			MJIdentifier obj = selector.getObject();
+			
+			// Check the declaration
+			MJVariable var;
+			try {
+				var = IR.find(obj.getName());
+			} catch (VariableNotFound e) {
+				throw new TypeCheckerException("Unkown identifier " + obj.getName());
+			}
+			
+			// Object must be of type class
+			MJType type = obj.getType();
+			if (!type.isClass()) {
+				throw new TypeCheckerException(obj.getName() +" is not type of class");
+			}
+			
+			// Type check all argument expressions
+			for (MJExpression e: arglist){
+				e.typeCheck();
+			}
+			
+			// Method name
+			this.getMethod().getName();
+			
+			// Object type name
+			type.getName();
+		}
 		
-		return MJType.getVoidType();
+		return this.getMethod().type;
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
 			throws TypeCheckerException {
+
+		// here you should enter the code to check whether all variables are
+		// initialized
+		id.variableInit(initialized);
 		
-		// here you should enter the code to check whether all variables are initialized
+		for (MJExpression e : arglist) {
+			e.variableInit(initialized);
+		}
 	}
 
 }

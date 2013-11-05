@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import compiler.PrettyPrinter;
 import compiler.Exceptions.TypeCheckerException;
+import compiler.Exceptions.VariableNotFound;
 
 public class MJIf extends MJStatement {
 
@@ -14,7 +15,7 @@ public class MJIf extends MJStatement {
 		this.condition = condition;
 		this.thenblock = thenblock;
 	}
-	
+
 	public MJExpression getCondition() {
 		return condition;
 	}
@@ -31,16 +32,27 @@ public class MJIf extends MJStatement {
 	}
 
 	MJType typeCheck() throws TypeCheckerException {
-		
+
 		// here you should enter the code to type check this class
 		
+		
+
 		return MJType.getVoidType();
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
 			throws TypeCheckerException {
-		
-		// here you should enter the code to check whether all variables are initialized
+
+		// here you should enter the code to check whether all variables are
+		// initialized
+
+		try {
+			IR.find(condition.getType().getName()).variableInit(initialized);
+			thenblock.variableInit(initialized);
+		} catch (VariableNotFound e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }
