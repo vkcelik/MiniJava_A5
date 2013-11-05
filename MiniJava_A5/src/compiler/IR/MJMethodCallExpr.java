@@ -41,40 +41,54 @@ public class MJMethodCallExpr extends MJExpression {
 	}
 	
 	MJType typeCheck() throws TypeCheckerException {
-		
+
 		// here you should enter the code to type check this class
+		MJType obj = null;
+		MJMethod mjm;
+		MJClass cl = null;
+		String navn;
 
 		if (method instanceof MJSelector) {
 			MJSelector selector = (MJSelector) method;
-			MJIdentifier obj = selector.getObject();
-			
-			// Check the declaration
-			MJVariable var;
-			try {
-				var = IR.find(obj.getName());
-			} catch (VariableNotFound e) {
-				throw new TypeCheckerException("Unkown identifier " + obj.getName());
-			}
-			
+			obj = selector.getObject().typeCheck();
+
 			// Object must be of type class
-			MJType type = obj.getType();
-			if (!type.isClass()) {
+			if (!obj.isClass()) {
 				throw new TypeCheckerException(obj.getName() +" is not type of class");
 			}
-			
-		
-			// Type check all argument expressions
-			for (MJExpression e: arglist){
-				e.typeCheck();
-			}
-			
-			// Method name
-		//	this.getMethod().getName();
-			
-			// Object type name
-			type.getName();
+
+			cl = obj.getDecl();
 		}
-		
+
+		if (method.getName().equals("this")){
+			cl=IR.currentClass;
+			navn = cl.getName();
+		}
+		if (method.getName().equals("super")){
+			cl = IR.currentClass.getSuperClass().getDecl();
+			navn = cl.getName();
+		}	
+		navn = method.getName();
+
+		// Check the declaration
+		MJVariable var;
+		try {
+			var = IR.find(obj.getName());
+		} catch (VariableNotFound e) {
+			throw new TypeCheckerException("Unkown identifier " + obj.getName());
+		}
+
+
+		// Type check all argument expressions
+		for (MJExpression e: arglist){
+			e.typeCheck();
+		}
+
+		// Method name
+		try{ mjm = IR.classes.lookupMethod(cl, navn, arglist);
+		} catch(Exception e){	};
+		// Object type name
+
 		return this.type;
 	}
 

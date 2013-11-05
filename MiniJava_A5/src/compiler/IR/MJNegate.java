@@ -19,14 +19,20 @@ public class MJNegate extends MJUnaryOp {
 	MJType typeCheck() throws TypeCheckerException {
 		
 		// here you should enter the code to type check this class
+		type.typeCheck();
 		
-		return MJType.getVoidType();
+		if (!type.isBoolean())
+			throw new TypeCheckerException("expression must be of type boolean");
+		
+		return this.type;
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
 			throws TypeCheckerException {
 		
 		// here you should enter the code to check whether all variables are initialized
+		
+		
 	}
 
 }

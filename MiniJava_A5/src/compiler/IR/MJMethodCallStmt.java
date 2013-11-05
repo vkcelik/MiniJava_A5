@@ -50,37 +50,51 @@ public class MJMethodCallStmt extends MJStatement {
 
 
 		// here you should enter the code to type check this class
-				
+		MJType obj = null;
+		MJMethod mjm;
+		MJClass cl = null;
+		String navn;
+
 		if (id instanceof MJSelector) {
 			MJSelector selector = (MJSelector) id;
-			MJIdentifier obj = selector.getObject();
-			
-			// Check the declaration
-			MJVariable var;
-			try {
-				var = IR.find(obj.getName());
-			} catch (VariableNotFound e) {
-				throw new TypeCheckerException("Unkown identifier " + obj.getName());
-			}
-			
+			obj = selector.getObject().typeCheck();
+
 			// Object must be of type class
-			MJType type = obj.getType();
-			if (!type.isClass()) {
+			if (!obj.isClass()) {
 				throw new TypeCheckerException(obj.getName() +" is not type of class");
 			}
-			
-			// Type check all argument expressions
-			for (MJExpression e: arglist){
-				e.typeCheck();
-			}
-			
-			// Method name
-			this.getMethod().getName();
-			
-			// Object type name
-			type.getName();
+
+			cl = obj.getDecl();
 		}
 
+		if (id.getName().equals("this")){
+			cl=IR.currentClass;
+			navn = cl.getName();
+		}
+		if (id.getName().equals("super")){
+			cl = IR.currentClass.getSuperClass().getDecl();
+			navn = cl.getName();
+		}	
+		navn = id.getName();
+
+		// Check the declaration
+		MJVariable var;
+		try {
+			var = IR.find(obj.getName());
+		} catch (VariableNotFound e) {
+			throw new TypeCheckerException("Unkown identifier " + obj.getName());
+		}
+
+
+		// Type check all argument expressions
+		for (MJExpression e: arglist){
+			e.typeCheck();
+		}
+
+		// Method name
+		try{ mjm = IR.classes.lookupMethod(cl, navn, arglist);
+		} catch(Exception e){	};
+		// Object type name
 
 		return this.getMethod().type;
 
@@ -93,7 +107,7 @@ public class MJMethodCallStmt extends MJStatement {
 		// here you should enter the code to check whether all variables are
 		// initialized
 		id.variableInit(initialized);
-		
+
 		for (MJExpression e : arglist) {
 			e.variableInit(initialized);
 		}
