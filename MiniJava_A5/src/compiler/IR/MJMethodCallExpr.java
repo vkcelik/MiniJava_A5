@@ -63,7 +63,6 @@ public class MJMethodCallExpr extends MJExpression {
 			}
 			
 		
-		
 			// Type check all argument expressions
 			for (MJExpression e: arglist){
 				e.typeCheck();

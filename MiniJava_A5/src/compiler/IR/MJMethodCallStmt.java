@@ -48,6 +48,7 @@ public class MJMethodCallStmt extends MJStatement {
 
 	MJType typeCheck() throws TypeCheckerException {
 
+
 		// here you should enter the code to type check this class
 				
 		if (id instanceof MJSelector) {
@@ -79,8 +80,11 @@ public class MJMethodCallStmt extends MJStatement {
 			// Object type name
 			type.getName();
 		}
-		
+
+
 		return this.getMethod().type;
+
+
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
@@ -93,6 +97,7 @@ public class MJMethodCallStmt extends MJStatement {
 		for (MJExpression e : arglist) {
 			e.variableInit(initialized);
 		}
+		// here you should enter the code to check whether all variables are initialized
 	}
 
 }
