@@ -85,7 +85,7 @@ public class MJSelector extends MJIdentifier {
 		// but the field might be uninitialized
 		// this does not matter - why?
 		
-		/* Because the field is the second identifier of the 
+		/* Because the fields are initialized in the MJClass.
 		 * 
 		 */
 	}

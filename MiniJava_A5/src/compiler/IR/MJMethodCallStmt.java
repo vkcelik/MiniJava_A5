@@ -48,34 +48,34 @@ public class MJMethodCallStmt extends MJStatement {
 
 	MJType typeCheck() throws TypeCheckerException {
 
-
 		// here you should enter the code to type check this class
-		MJType obj = null;
-		MJMethod mjm;
+		MJIdentifier obj = null;
+		MJMethod method = null;
 		MJClass cl = null;
-		String navn;
+		String methodName = null;
 
 		if (id instanceof MJSelector) {
 			MJSelector selector = (MJSelector) id;
-			obj = selector.getObject().typeCheck();
+			obj = selector.getObject();
+			obj.typeCheck();
 
 			// Object must be of type class
-			if (!obj.isClass()) {
-				throw new TypeCheckerException(obj.getName() +" is not type of class");
+			if (!obj.getType().isClass()) {
+				throw new TypeCheckerException(obj.getName()
+						+ " is not type of class");
 			}
 
-			cl = obj.getDecl();
+			cl = obj.getType().getDecl();
+			methodName = selector.getField().getName();
+		} else {
+			methodName = id.getName();
+			if (id.getName().equals("this")) {
+				cl = IR.currentClass;
+			}
+			if (id.getName().equals("super")) {
+				cl = IR.currentClass.getSuperClass().getDecl();
+			}
 		}
-
-		if (id.getName().equals("this")){
-			cl=IR.currentClass;
-			navn = cl.getName();
-		}
-		if (id.getName().equals("super")){
-			cl = IR.currentClass.getSuperClass().getDecl();
-			navn = cl.getName();
-		}	
-		navn = id.getName();
 
 		// Check the declaration
 		MJVariable var;
@@ -85,20 +85,21 @@ public class MJMethodCallStmt extends MJStatement {
 			throw new TypeCheckerException("Unkown identifier " + obj.getName());
 		}
 
-
 		// Type check all argument expressions
-		for (MJExpression e: arglist){
+		for (MJExpression e : arglist) {
 			e.typeCheck();
 		}
 
 		// Method name
-		try{ mjm = IR.classes.lookupMethod(cl, navn, arglist);
-		} catch(Exception e){	};
-		// Object type name
+		try {
+			method = IR.classes.lookupMethod(cl, methodName, arglist);
+		} catch (Exception e) {
+			throw new TypeCheckerException("class " + cl.getName()
+					+ " deosn't have a methode " + methodName + " with arguments "
+					+ arglist.toString());
+		}
 
-		return this.getMethod().type;
-
-
+		return MJType.getVoidType();
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
@@ -111,7 +112,8 @@ public class MJMethodCallStmt extends MJStatement {
 		for (MJExpression e : arglist) {
 			e.variableInit(initialized);
 		}
-		// here you should enter the code to check whether all variables are initialized
+		// here you should enter the code to check whether all variables are
+		// initialized
 	}
 
 }

@@ -48,17 +48,17 @@ public class MJNew extends MJExpression {
 			e.typeCheck();
 		}
 		try{
-			target = IR.classes.lookupConstructor(type.getDecl());
+			target = IR.classes.lookupConstructor(type.getDecl(), arglist);
 		}
 		catch (ClassErrorMethod e) {
-			throw new TypeCheckerException("");
+			throw new TypeCheckerException("This class is not defined.");
 		} 
 		catch (MethodNotFound e){
-			throw new TypeCheckerException("");
+			throw new TypeCheckerException("No suitable constructor found");
 		}
 
 
-		return this.type;
+		return this.getType();
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)

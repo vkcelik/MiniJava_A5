@@ -43,37 +43,43 @@ public class MJMethodCallExpr extends MJExpression {
 	MJType typeCheck() throws TypeCheckerException {
 
 		// here you should enter the code to type check this class
-		MJType obj = null;
-		MJMethod mjm;
+		MJIdentifier obj = null;
 		MJClass cl = null;
-		String navn;
-
+		String methodName = null;
+		
 		if (method instanceof MJSelector) {
 			MJSelector selector = (MJSelector) method;
-			obj = selector.getObject().typeCheck();
+			obj = selector.getObject();
+			obj.typeCheck();
 
 			// Object must be of type class
-			if (!obj.isClass()) {
+			if (!obj.getType().isClass()) {
 				throw new TypeCheckerException(obj.getName() +" is not type of class");
 			}
 
-			cl = obj.getDecl();
+			try {
+				cl = IR.classes.lookup(obj.getType().getName());
+			} catch (ClassNotFound e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			methodName = selector.getField().getName();
+		} else {
+			methodName = method.getName();
+			if (methodName.equals("this")){
+				cl=IR.currentClass;
+			}
+			if (methodName.equals("super")){
+				cl = IR.currentClass.getSuperClass().getDecl();
+			}
 		}
-
-		if (method.getName().equals("this")){
-			cl=IR.currentClass;
-			navn = cl.getName();
-		}
-		if (method.getName().equals("super")){
-			cl = IR.currentClass.getSuperClass().getDecl();
-			navn = cl.getName();
-		}	
-		navn = method.getName();
 
 		// Check the declaration
 		MJVariable var;
 		try {
 			var = IR.find(obj.getName());
+			var.typeCheck();
 		} catch (VariableNotFound e) {
 			throw new TypeCheckerException("Unkown identifier " + obj.getName());
 		}
@@ -84,10 +90,18 @@ public class MJMethodCallExpr extends MJExpression {
 			e.typeCheck();
 		}
 
-		// Method name
-		try{ mjm = IR.classes.lookupMethod(cl, navn, arglist);
-		} catch(Exception e){	};
-		// Object type name
+		try {
+			this.target = IR.classes.lookupMethod(cl, methodName, arglist);
+			this.target.typeCheck();
+		} catch (ClassErrorMethod e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (MethodNotFound e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		type = target.getReturnType();
 
 		return this.type;
 	}

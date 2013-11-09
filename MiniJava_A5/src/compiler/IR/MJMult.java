@@ -31,7 +31,7 @@ public class MJMult extends MJBinaryOp {
 
 		if (!this.type.isInt()) {
 			throw new TypeCheckerException(
-					"Arguments to * must have type boolean.");
+					"Arguments to * must have type int.");
 		}
 
 		return this.type;

@@ -24,7 +24,7 @@ public class MJNegate extends MJUnaryOp {
 		if (!type.isBoolean())
 			throw new TypeCheckerException("expression must be of type boolean");
 		
-		return this.type;
+		return this.getType();
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)

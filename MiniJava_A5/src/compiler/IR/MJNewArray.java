@@ -25,22 +25,11 @@ public class MJNewArray extends MJNew {
 	MJType typeCheck() throws TypeCheckerException {
 		
 		// here you should enter the code to type check this class
-		type.typeCheck();
-		for (MJExpression e : arglist) {
-			e.typeCheck();
-		}
-		try{
-			target = IR.classes.lookupConstructor(type.getDecl());
-		}
-		catch (ClassErrorMethod e) {
-			throw new TypeCheckerException("");
-		} 
-		catch (MethodNotFound e){
-			throw new TypeCheckerException("");
-		}
-
+		size.typeCheck();
+		if(!size.getType().isInt())
+			throw new TypeCheckerException("size of array must be of type int");
 		
-		return MJType.getVoidType();
+		return this.getType();
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
