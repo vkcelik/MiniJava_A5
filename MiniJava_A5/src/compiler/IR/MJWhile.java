@@ -33,6 +33,7 @@ public class MJWhile extends MJStatement {
 	MJType typeCheck() throws TypeCheckerException {
 		
 		// here you should enter the code to type check this class
+		// A while statement type checks if the expression has type boolean and the body type checks.
 		
 		return MJType.getVoidType();
 	}

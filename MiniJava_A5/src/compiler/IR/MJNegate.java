@@ -19,12 +19,16 @@ public class MJNegate extends MJUnaryOp {
 	MJType typeCheck() throws TypeCheckerException {
 		
 		// here you should enter the code to type check this class
+		// The logical negation type checks if the argument type checks and has type boolean. 
+		// The expression has type boolean.
 		type.typeCheck();
 		
 		if (!type.isBoolean())
 			throw new TypeCheckerException("expression must be of type boolean");
 		
-		return this.getType();
+		this.type = MJType.getBooleanType();
+		
+		return this.type;
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)

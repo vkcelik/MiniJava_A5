@@ -28,15 +28,17 @@ public class MJNewArray extends MJNew {
 		size.typeCheck();
 		if(!size.getType().isInt())
 			throw new TypeCheckerException("size of array must be of type int");
+		
+		this.type = MJType.getArrayType(MJType.getIntType());
 	
-		return MJType.getArrayType(size.getType());
+		return this.type;
 	}
 
 	void variableInit(HashSet<MJVariable> initialized)
 			throws TypeCheckerException {
 		
 		// here you should enter the code to check whether all variables are initialized
-		
+		size.variableInit(initialized);
 	}
 
 }

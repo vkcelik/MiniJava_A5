@@ -36,7 +36,10 @@ public class MJIdentifier extends MJExpression {
 
 	MJType typeCheck() throws TypeCheckerException {
 
+		//  An identifier type checks if a declaration of it is visible in the 
+		// current scope. It has the type as which it has been declared.
 		// find the declaration for the identifier on the stack
+		
 		MJVariable var;
 		String name = this.name;
 		
