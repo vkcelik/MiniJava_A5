@@ -56,8 +56,9 @@ public class MJNew extends MJExpression {
 		catch (MethodNotFound e){
 			throw new TypeCheckerException("No suitable constructor found");
 		}
-
-
+		
+		this.type = MJType.getClassType(type.getName());
+		
 		return this.getType();
 	}
 

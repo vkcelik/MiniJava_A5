@@ -35,7 +35,7 @@ public class MJNegate extends MJUnaryOp {
 			throws TypeCheckerException {
 		
 		// here you should enter the code to check whether all variables are initialized
-		
+		arg.variableInit(initialized);
 		
 	}
 

@@ -101,7 +101,7 @@ public class MJMethodCallExpr extends MJExpression {
 			e1.printStackTrace();
 		}
 		
-		type = target.getReturnType();
+		this.type = target.getReturnType();
 
 		return this.type;
 	}
