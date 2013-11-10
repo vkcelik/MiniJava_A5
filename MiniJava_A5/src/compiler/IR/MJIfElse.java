@@ -4,6 +4,7 @@ import java.util.HashSet;
 
 import compiler.PrettyPrinter;
 import compiler.Exceptions.TypeCheckerException;
+import compiler.Exceptions.VariableNotFound;
 
 public class MJIfElse extends MJIf {
 
@@ -27,7 +28,12 @@ public class MJIfElse extends MJIf {
 	MJType typeCheck() throws TypeCheckerException {
 		
 		// here you should enter the code to type check this class
+		if(!condition.getType().isBoolean()){
+			throw new TypeCheckerException("The expression must have type boolean.");
+		}
 		
+		thenblock.typeCheck();
+		elseblock.typeCheck();
 		
 		return MJType.getVoidType();
 	}
@@ -36,6 +42,13 @@ public class MJIfElse extends MJIf {
 			throws TypeCheckerException {
 		
 		// here you should enter the code to check whether all variables are initialized
+		try {
+			IR.find(condition.getType().getName()).variableInit(initialized);
+			thenblock.variableInit(initialized);
+			elseblock.variableInit(initialized);
+		} catch (VariableNotFound e) {
+			e.printStackTrace();
+		}
 	}
 
 }
