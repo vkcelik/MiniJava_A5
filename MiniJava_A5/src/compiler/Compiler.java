@@ -152,9 +152,6 @@ public class Compiler {
 		return filename;
 	}
 
-	/**
-	 * @return
-	 */
 	public static String getOutputfilename() {
 		return outputfilename;
 	}
