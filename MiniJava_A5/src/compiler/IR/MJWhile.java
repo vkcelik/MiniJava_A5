@@ -34,6 +34,7 @@ public class MJWhile extends MJStatement {
 		
 		// here you should enter the code to type check this class
 		// A while statement type checks if the expression has type boolean and the body type checks.
+		condition.typeCheck();
 		
 		if(!condition.type.isBoolean()){
 			throw new TypeCheckerException("the condition for the while loop must have type boolean.");
