@@ -1,32 +1,18 @@
 class testmain {
-
+	
 	public static void main(String[] args) {
-
 		A a;
-		int x;
+		int x;		
 
-		a = new A(5);
-		x = 6 * a.getNumber();
-
+		a = new A();
+		x = 6*a.test();
 		
 		System.out.println(x);
 	}
 }
 
 class A {
-	int number;
-	
-	public A A(int n){
-		this.number = n;
-		return this;
-	}
-	
-	public int getNumber() {
-		return this.number;
-	}
-
-	public void setNumber(int number) {
-		this.number = number;
-		return;
+	int test() {
+		return 7;
 	}
 }
