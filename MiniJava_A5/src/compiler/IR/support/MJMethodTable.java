@@ -129,7 +129,7 @@ public class MJMethodTable {
 				// can ignore this method
 
 				if ( (m.isStatic() && pars.size() != arglist.size())
-						|| (!m.isStatic() && (pars.size() != arglist.size()))
+						|| (!m.isStatic() && (pars.size()-1 != arglist.size()))
 				   ) {
 					continue;
 				}

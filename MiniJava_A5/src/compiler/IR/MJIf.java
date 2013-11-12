@@ -34,6 +34,8 @@ public class MJIf extends MJStatement {
 	MJType typeCheck() throws TypeCheckerException {
 
 		// here you should enter the code to type check this class
+		condition.typeCheck();
+		
 		if(!condition.getType().isBoolean()){
 			throw new TypeCheckerException("The expression must have type boolean.");
 		}

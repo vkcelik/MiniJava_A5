@@ -47,15 +47,18 @@ public class MJNew extends MJExpression {
 		for (MJExpression e : arglist) {
 			e.typeCheck();
 		}
-		try{
-			target = IR.classes.lookupConstructor(type.getDecl(), arglist);
-		}
-		catch (ClassErrorMethod e) {
-			throw new TypeCheckerException("This class is not defined.");
-		} 
-		catch (MethodNotFound e){
-			throw new TypeCheckerException("No suitable constructor found");
-		}
+		
+		// find constuctor
+		target = null;
+//		try{
+//			target = IR.classes.lookupConstructor(type.getDecl(), arglist);
+//		}
+//		catch (ClassErrorMethod e) {
+//			throw new TypeCheckerException("This class is not defined.");
+//		} 
+//		catch (MethodNotFound e){
+//			throw new TypeCheckerException("No suitable constructor found");
+//		}
 		
 		this.type = MJType.getClassType(type.getName());
 		
