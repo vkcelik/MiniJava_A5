@@ -21,7 +21,8 @@ public class MJNegate extends MJUnaryOp {
 		// here you should enter the code to type check this class
 		// The logical negation type checks if the argument type checks and has type boolean. 
 		// The expression has type boolean.
-		type.typeCheck();
+		
+		this.type = this.arg.typeCheck();
 		
 		if (!type.isBoolean())
 			throw new TypeCheckerException("expression must be of type boolean");

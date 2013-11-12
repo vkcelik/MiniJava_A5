@@ -1,5 +1,5 @@
 class testmain {
-	
+	// fejler når man tester. Fejlen skyldes den udleverede kode, da this fremgår to gange.
 	public static void main(String[] args) {
 		A a;
 		int x;		

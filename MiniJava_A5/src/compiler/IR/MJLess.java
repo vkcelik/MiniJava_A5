@@ -22,10 +22,11 @@ public class MJLess extends MJBinaryOp {
 		MJType rightType = this.rhs.typeCheck();
 		
 		if (!leftType.isSame(rightType)){
-			throw new TypeCheckerException("types in < op must be the same ("+leftType.getName()+","+rightType.getName()+","+this.getClass().getName()+")");
+			throw new TypeCheckerException("types in < op must both be same type.");
 		}
 		
-		this.type=leftType;
+		
+		this.type=MJType.getBooleanType();
 		
 		if (!this.type.isInt()) {
 			new TypeCheckerException("Arguments to + must have type int.");
