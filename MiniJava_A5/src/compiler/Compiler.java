@@ -83,41 +83,58 @@ public class Compiler {
 	}
 
 	public void compile() throws CompilerError
-	{
-		IR ir;
-		
-		System.out.print("Parsing... ");
+    {
+            IR ir;
 
-		try {
-			ir = Frontend.parse(Compiler.filename);
-		} catch (ParseError e) {
-			throw new CompilerError("Parse Error: "+e.getMessage());
-		}
-		
-		System.out.println("done.");
-		
-		if (Compiler.isDebug()) {
-			ir.prettyPrint();
-		}
-		
-		if (Compiler.isDebug()) {
-			ir.prettyPrint();
-		}
-		
-		System.out.println("Analysing... ");
+            System.out.print("Parsing... ");
 
-		try {
-			Analysis.analyse(ir);
-		} catch (TypeCheckerException e) {
-			throw new CompilerError("TypeCheckError "+e.getMessage());
-		}
+            try {
+                    ir = Frontend.parse(Compiler.filename);
+            } catch (ParseError e) {
+                    throw new CompilerError("Parse Error: "+e.getMessage());
+            }
 
-		System.out.println("done.");
-		
-		if (Compiler.isDebug()) {
-			ir.prettyPrint();
-		}
-	}
+            System.out.println("done.");
+
+            if (Compiler.isDebug()) {
+                    ir.prettyPrint();
+            }
+
+            System.out.println("Rewriting 1... ");
+
+            for (MJClass c : ir.getProgram().getClasses() ) {
+
+                    for (MJMethod m : c.getMethodList() ) {
+                            if (!m.isStatic()) {
+
+                                    MJType t = MJType.getClassType( c );
+                                    MJVariable v = new MJVariable(t,"this");
+
+                                    m.getParameters().addFirst(v);
+                            }
+                    }
+            }
+
+            System.out.println("done.");
+
+            if (Compiler.isDebug()) {
+                    ir.prettyPrint();
+            }
+
+            System.out.println("Analysing... ");
+
+            try {
+                    Analysis.analyse(ir);
+            } catch (TypeCheckerException e) {
+                    throw new CompilerError("TypeCheckError "+e.getMessage());
+            }
+
+            System.out.println("done.");
+
+            if (Compiler.isDebug()) {
+                    ir.prettyPrint();
+            }
+    }
 	
 	private void help() {
 		
